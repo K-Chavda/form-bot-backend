@@ -75,7 +75,7 @@ const createForm = async (req, res, next) => {
       const folder = await Folder.findById({ _id: folderId });
 
       if (!folder) {
-        return res.status(404).json({
+        return res.status(200).json({
           success: false,
           message: "Folder not found.",
         });
