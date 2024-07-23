@@ -12,7 +12,7 @@ const getAllForms = async (req, res, next) => {
       : await Form.find({ createdBy: userId });
 
     if (!forms || forms.length === 0) {
-      return res.status(404).json({
+      return res.status(200).json({
         success: false,
         message: "No forms found in this folder.",
       });
