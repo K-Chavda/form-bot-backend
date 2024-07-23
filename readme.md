@@ -1,55 +1,37 @@
-# Project Title
-
-A brief description of what this project is about and its primary purpose.
-
 ## Table of Contents
 
 - [Project Title](#project-title)
 - [Table of Contents](#table-of-contents)
 - [Requirements Gathering](#requirements-gathering)
 - [Backend Setup](#backend-setup)
-  - [Folder Structure](#folder-structure)
   - [Database Connection](#database-connection)
   - [Installed NPM Packages](#installed-npm-packages)
 - [Development Planning](#development-planning)
   - [Backend Models](#backend-models)
 - [Environment Variables](#environment-variables)
 - [Getting Started](#getting-started)
-- [Contributing](#contributing)
-- [License](#license)
+- [API Documentation](#api-documentation)
+  - [Register User](#api-register-user)
+  - [Login User](#api-login-user)
 
 ## Requirements Gathering
 
-Gathered all necessary requirements to ensure a comprehensive understanding of the project scope and objectives.
+Gathered all necessary requirements to ensure a comprehensive understanding of the project scope and objectives. This phase involved:
+
+- Identifying key features and functionalities.
+- Understanding user needs and business objectives.
+- Documenting technical and non-technical requirements.
 
 ## Backend Setup
 
 Started setting up the backend to create a robust foundation for the application.
 
-### Folder Structure
-
-Created the following folder and file structure to organize the backend code:
-
-```
-src
-|_ controllers
-|_ db
-  |_ dbConnect.js
-|_ middlewares
-|_ models
-|_ routes
-|_ utils
-|_ app.js
-|_ constants.js
-|_ index.js
-.env
-package-lock.json
-package.json
-```
-
 ### Database Connection
 
-Set up the database connection in `src/db/dbConnect.js`.
+Set up the database connection using Mongoose to interact with MongoDB. This handles:
+
+- Establishing a connection to the MongoDB database.
+- Handling connection errors and retry logic.
 
 ### Installed NPM Packages
 
@@ -71,11 +53,18 @@ Excalidraw File URL: https://excalidraw.com/#json=bKgQkUqj_OjWh93wsx65m,-V4faDbM
 
 ### Backend Models
 
-Outlined and designed the backend models to streamline the development process and ensure data consistency.
+Outlined and designed the backend models to streamline the development process and ensure data consistency. Models include:
+
+- User Model: Defines user attributes and schema.
+- Other Models: Include additional entities required for the project.
 
 ## Environment Variables
 
-Created an `.env` file to manage environment-specific variables. Ensure this file is included in the `.gitignore` to avoid exposing sensitive information.
+Created an `.env` file to manage environment-specific variables. Ensure this file is included in the `.gitignore` to avoid exposing sensitive information. Variables include:
+
+- `DB_URI`: MongoDB connection string.
+- `JWT_SECRET`: Secret key for JWT.
+- `PORT`: Port number for the server.
 
 ## Getting Started
 
@@ -99,3 +88,89 @@ To get a local copy of this project up and running, follow these steps:
    ```bash
    npm run dev
    ```
+
+## API Documentation
+
+### API: Register User
+
+`POST /api/v1/user/register`
+
+#### Request Example
+
+##### Request Body
+
+```json
+{
+  "username": "[username]",
+  "email": "[email]",
+  "password": "[password]"
+}
+```
+
+##### Request Headers
+
+```
+{
+  "Content-Type": "application/json",
+}
+```
+
+#### Success Response
+
+```json
+{
+  "success": true,
+  "message": "User created successfully.",
+  "data": {
+    "username": "[username]",
+    "email": "[email]",
+    "password": "[encrypted password]",
+    "_id": "[userId]",
+    "createdAt": "[timestamp]",
+    "updatedAt": "[timestamp]",
+    "__v": 0
+  }
+}
+```
+
+### API: Login User
+
+`POST /api/v1/user/login`
+
+#### Request Example
+
+##### Request Body
+
+```json
+{
+  "email": "[email]",
+  "password": "[password]"
+}
+```
+
+##### Request Headers
+
+```
+{
+  "Content-Type": "application/json",
+}
+```
+
+#### Success Response
+
+```json
+{
+  "success": true,
+  "message": "User logged in successfully.",
+  "token": "[AUTH_TOKEN]",
+  "userDetails": {
+    "_id": "[userId]",
+    "username": "[username]",
+    "email": "[email]",
+    "password": "[encrypted password]",
+    "createdAt": "[timestamp]",
+    "updatedAt": "[timestamp]",
+    "__v": 0
+  }
+}
+```
