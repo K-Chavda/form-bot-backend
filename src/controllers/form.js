@@ -313,7 +313,7 @@ const getAllFormFields = async (req, res, next) => {
 const createFormFields = async (req, res, next) => {
   try {
     const { formId } = req.params;
-    const { userId, seq, type, displayValue } = req.body;
+    const { userId, seq, type, displayValue, fieldValue } = req.body;
 
     if (!formId) {
       return res.status(400).json({
@@ -350,6 +350,7 @@ const createFormFields = async (req, res, next) => {
         seq,
         type,
         displayValue,
+        fieldValue,
       });
     } else {
       formField = new FormField({
@@ -360,6 +361,7 @@ const createFormFields = async (req, res, next) => {
             seq,
             type,
             displayValue,
+            fieldValue,
           },
         ],
       });

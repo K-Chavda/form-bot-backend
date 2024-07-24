@@ -55,10 +55,13 @@ const formFieldsSchema = new Schema(
         },
         type: {
           type: String,
-          enum: ["bubble", "input"],
+          enum: ["bubble", "input", "start"],
           required: true,
         },
         displayValue: {
+          type: String,
+        },
+        fieldValue: {
           type: String,
         },
       },
