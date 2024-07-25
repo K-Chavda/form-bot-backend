@@ -400,7 +400,7 @@ const createFormFields = async (req, res, next) => {
 const updateFormFields = async (req, res, next) => {
   try {
     const { formId, formFieldId } = req.params;
-    const { seq, type, displayValue } = req.body;
+    const { seq, type, displayValue, fieldValue } = req.body;
 
     if (!formId || !formFieldId) {
       return res.status(204).json({
@@ -431,6 +431,7 @@ const updateFormFields = async (req, res, next) => {
       if (element.seq === seq) {
         element.type = type;
         element.displayValue = displayValue;
+        element.fieldValue = fieldValue;
       }
     });
 
