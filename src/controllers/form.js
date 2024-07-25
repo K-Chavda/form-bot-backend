@@ -12,7 +12,7 @@ const getAllForms = async (req, res, next) => {
       : await Form.find({ createdBy: userId });
 
     if (!forms || forms.length === 0) {
-      return res.status(200).json({
+      return res.status(204).json({
         success: false,
         message: "No forms found in this folder.",
       });
@@ -37,7 +37,7 @@ const getFormById = async (req, res, next) => {
     const { formId } = req.params;
 
     if (!formId) {
-      return res.status(400).json({
+      return res.status(204).json({
         success: false,
         message: "Form ID is required.",
       });
@@ -46,7 +46,7 @@ const getFormById = async (req, res, next) => {
     const form = await Form.findById({ _id: formId });
 
     if (!form) {
-      return res.status(404).json({
+      return res.status(204).json({
         success: false,
         message: "Form not found.",
       });
@@ -75,7 +75,7 @@ const createForm = async (req, res, next) => {
       const folder = await Folder.findById({ _id: folderId });
 
       if (!folder) {
-        return res.status(200).json({
+        return res.status(204).json({
           success: false,
           message: "Folder not found.",
         });
@@ -88,7 +88,7 @@ const createForm = async (req, res, next) => {
     });
 
     if (isFormExists.length > 0) {
-      return res.status(400).json({
+      return res.status(204).json({
         success: false,
         message: "Form with the same name already exists in this folder.",
       });
@@ -123,7 +123,7 @@ const updateFormDetails = async (req, res, next) => {
     const { name, theme } = req.body;
 
     if (!formId) {
-      return res.status(400).json({
+      return res.status(204).json({
         success: false,
         message: "Form ID is required.",
       });
@@ -132,14 +132,14 @@ const updateFormDetails = async (req, res, next) => {
     const form = await Form.findById({ _id: formId });
 
     if (!form) {
-      return res.status(404).json({
+      return res.status(204).json({
         success: false,
         message: "Form not found.",
       });
     }
 
     if (form.name === name && form.theme === theme) {
-      return res.status(200).json({
+      return res.status(204).json({
         success: false,
         message: "No changes made to the form.",
       });
@@ -169,7 +169,7 @@ const deleteForm = async (req, res, next) => {
     const { formId } = req.params;
 
     if (!formId) {
-      return res.status(400).json({
+      return res.status(204).json({
         success: false,
         message: "Form ID is required.",
       });
@@ -178,7 +178,7 @@ const deleteForm = async (req, res, next) => {
     const form = await Form.findById({ _id: formId });
 
     if (!form) {
-      return res.status(404).json({
+      return res.status(204).json({
         success: false,
         message: "Form not found.",
       });
@@ -204,7 +204,7 @@ const increaseFormView = async (req, res, next) => {
     const { formId } = req.params;
 
     if (!formId) {
-      return res.status(400).json({
+      return res.status(204).json({
         success: false,
         message: "Form ID is required.",
       });
@@ -217,7 +217,7 @@ const increaseFormView = async (req, res, next) => {
     );
 
     if (!form) {
-      return res.status(404).json({
+      return res.status(204).json({
         success: false,
         message: "Form not found.",
       });
@@ -242,7 +242,7 @@ const increaseStartCount = async (req, res, next) => {
     const { formId } = req.params;
 
     if (!formId) {
-      return res.status(400).json({
+      return res.status(204).json({
         success: false,
         message: "Form ID is required.",
       });
@@ -255,7 +255,7 @@ const increaseStartCount = async (req, res, next) => {
     );
 
     if (!form) {
-      return res.status(404).json({
+      return res.status(204).json({
         success: false,
         message: "Form not found.",
       });
@@ -281,7 +281,7 @@ const getAllFormFields = async (req, res, next) => {
     const { formId, formFieldId } = req.params;
 
     if (!formId || !formFieldId) {
-      return res.status(400).json({
+      return res.status(204).json({
         success: false,
         message: "Form ID or form field ID is required.",
       });
@@ -290,7 +290,7 @@ const getAllFormFields = async (req, res, next) => {
     const formField = await FormField.findById({ _id: formFieldId });
 
     if (!formField) {
-      return res.status(404).json({
+      return res.status(204).json({
         success: false,
         message: "Form field not found.",
       });
@@ -313,19 +313,26 @@ const getAllFormFields = async (req, res, next) => {
 const createFormFields = async (req, res, next) => {
   try {
     const { formId } = req.params;
-    const { userId, seq, type, displayValue, fieldValue } = req.body;
+    const { userId, formFields } = req.body;
 
     if (!formId) {
-      return res.status(400).json({
+      return res.status(204).json({
         success: false,
         message: "Form ID is required.",
+      });
+    }
+
+    if (!formFields || formFields.length === 0) {
+      return res.status(204).json({
+        success: false,
+        message: "Form fields are required.",
       });
     }
 
     const form = await Form.findById(formId);
 
     if (!form) {
-      return res.status(404).json({
+      return res.status(204).json({
         success: false,
         message: "Form not found.",
       });
@@ -333,46 +340,53 @@ const createFormFields = async (req, res, next) => {
 
     let formField = await FormField.findOne({ formId });
 
-    if (formField) {
-      const existingField = formField.formFields.find(
-        (field) => field.seq === seq && field.type === type
-      );
-
-      if (existingField) {
-        return res.status(400).json({
-          success: false,
-          message:
-            "A field with the same seq and type already exists for this form.",
-        });
-      }
-
-      formField.formFields.push({
-        seq,
-        type,
-        displayValue,
-        fieldValue,
-      });
-    } else {
+    if (!formField) {
       formField = new FormField({
         formId,
         createdBy: userId,
-        formFields: [
-          {
-            seq,
-            type,
-            displayValue,
-            fieldValue,
-          },
-        ],
+        formFields,
       });
+    } else {
+      // Iterate over existing form fields and update fieldValue and displayValue for matching type and seq
+      formField.formFields = formField.formFields.map((existingField) => {
+        const updatedField = formFields.find(
+          (field) =>
+            field.type === existingField.type && field.seq === existingField.seq
+        );
+
+        if (updatedField) {
+          return {
+            ...existingField,
+            fieldValue: updatedField.fieldValue,
+            displayValue: updatedField.displayValue,
+          };
+        }
+
+        return existingField;
+      });
+
+      // Add any new form fields that do not exist in the current formField.formFields
+      const newFormFields = formFields.filter(
+        (newField) =>
+          !formField.formFields.some(
+            (existingField) =>
+              existingField.type === newField.type &&
+              existingField.seq === newField.seq
+          )
+      );
+
+      formField.formFields.push(...newFormFields);
+
+      formField.updatedBy = userId;
+      formField.updatedAt = new Date();
     }
 
     await formField.save();
 
     return res.status(201).json({
       success: true,
-      message: "Form field created successfully.",
-      data: form,
+      message: "Form field created/updated successfully.",
+      data: formField,
     });
   } catch (error) {
     return res.status(500).json({
@@ -389,7 +403,7 @@ const updateFormFields = async (req, res, next) => {
     const { seq, type, displayValue } = req.body;
 
     if (!formId || !formFieldId) {
-      return res.status(400).json({
+      return res.status(204).json({
         success: false,
         message: "Form ID and form field ID are required.",
       });
@@ -398,7 +412,7 @@ const updateFormFields = async (req, res, next) => {
     const form = await Form.findById({ _id: formId });
 
     if (!form) {
-      return res.status(404).json({
+      return res.status(204).json({
         success: false,
         message: "Form not found.",
       });
@@ -407,7 +421,7 @@ const updateFormFields = async (req, res, next) => {
     const formField = await FormField.findById({ _id: formFieldId });
 
     if (!formField) {
-      return res.status(404).json({
+      return res.status(204).json({
         success: false,
         message: "Form field not found.",
       });
@@ -441,7 +455,7 @@ const deleteFormField = async (req, res, next) => {
     const { formId, formFieldId, fieldId } = req.params;
 
     if (!formId || !formFieldId || !fieldId) {
-      return res.status(400).json({
+      return res.status(204).json({
         success: false,
         message: "Form ID, form field ID and field ID are required.",
       });
@@ -450,7 +464,7 @@ const deleteFormField = async (req, res, next) => {
     const form = await Form.findById({ _id: formId });
 
     if (!form) {
-      return res.status(404).json({
+      return res.status(204).json({
         success: false,
         message: "Form not found.",
       });
@@ -459,7 +473,7 @@ const deleteFormField = async (req, res, next) => {
     const formField = await FormField.findById({ _id: formFieldId });
 
     if (!formField) {
-      return res.status(404).json({
+      return res.status(204).json({
         success: false,
         message: "Form field not found.",
       });
@@ -491,7 +505,7 @@ const createUserResponse = async (req, res, next) => {
     const { response, seq, userId } = req.body;
 
     if (!response || !seq) {
-      return res.status(400).json({
+      return res.status(204).json({
         success: false,
         message: "Seq and response are required.",
       });
@@ -500,7 +514,7 @@ const createUserResponse = async (req, res, next) => {
     const form = await Form.findById(formId);
 
     if (!form) {
-      return res.status(404).json({
+      return res.status(204).json({
         success: false,
         message: "Form not found.",
       });
@@ -509,7 +523,7 @@ const createUserResponse = async (req, res, next) => {
     const formField = await FormField.findById(formFieldId);
 
     if (!formField) {
-      return res.status(404).json({
+      return res.status(204).json({
         success: false,
         message: "Form field not found.",
       });
@@ -523,7 +537,7 @@ const createUserResponse = async (req, res, next) => {
       );
 
       if (existingResponse) {
-        return res.status(400).json({
+        return res.status(204).json({
           success: false,
           message:
             "A response with the same seq already exists for this form field.",

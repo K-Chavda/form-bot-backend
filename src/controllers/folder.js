@@ -8,7 +8,7 @@ const getFolders = async (req, res, next) => {
     const folders = await Folder.find({ createdBy: userId }).select("name");
 
     if (!folders || folders.length === 0) {
-      return res.status(200).json({
+      return res.status(204).json({
         success: false,
         message: "No folders found for this user.",
       });
@@ -37,7 +37,7 @@ const createFolder = async (req, res, next) => {
     });
 
     if (ifExists) {
-      return res.status(400).json({
+      return res.status(204).json({
         success: false,
         message: "Folder with the same name already exists.",
       });
@@ -70,7 +70,7 @@ const updateFolderName = async (req, res, next) => {
     const { name } = req.body;
 
     if (!folderId) {
-      return res.status(400).json({
+      return res.status(204).json({
         success: false,
         message: "Folder ID is required.",
       });
@@ -79,7 +79,7 @@ const updateFolderName = async (req, res, next) => {
     const folder = await Folder.findById({ _id: folderId });
 
     if (!folder) {
-      return res.status(404).json({
+      return res.status(204).json({
         success: false,
         message: "Folder not found.",
       });
@@ -108,7 +108,7 @@ const deleteFolder = async (req, res, next) => {
     const { folderId } = req.params;
 
     if (!folderId) {
-      return res.status(400).json({
+      return res.status(204).json({
         success: false,
         message: "Folder ID is required.",
       });
@@ -117,7 +117,7 @@ const deleteFolder = async (req, res, next) => {
     const folder = await Folder.findById({ _id: folderId });
 
     if (!folder) {
-      return res.status(404).json({
+      return res.status(204).json({
         success: false,
         message: "Folder not found.",
       });

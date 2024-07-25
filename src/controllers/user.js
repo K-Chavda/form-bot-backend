@@ -7,7 +7,7 @@ const registerUser = async (req, res, next) => {
     const { username, email, password } = req.body;
 
     if (!email) {
-      return res.status(400).json({
+      return res.status(204).json({
         success: false,
         message: "Please provide all the required fields.",
       });
@@ -16,7 +16,7 @@ const registerUser = async (req, res, next) => {
     const user = await User.findOne({ email });
 
     if (user) {
-      return res.status(400).json({
+      return res.status(204).json({
         success: false,
         message: "User already exists.",
       });
@@ -49,7 +49,7 @@ const loginUser = async (req, res, next) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.status(400).json({
+      return res.status(204).json({
         success: false,
         message: "Please provide all the required fields.",
       });
@@ -58,7 +58,7 @@ const loginUser = async (req, res, next) => {
     const userDetails = await User.findOne({ email });
 
     if (!userDetails || !userDetails.password) {
-      return res.status(404).json({
+      return res.status(204).json({
         success: false,
         message: "User does not exist.",
       });
@@ -107,7 +107,7 @@ const updateUserDetails = async (req, res, next) => {
     const userDetails = await User.findById(userId);
 
     if (!userDetails) {
-      return res.status(404).json({
+      return res.status(204).json({
         success: false,
         message: "User not found.",
       });
