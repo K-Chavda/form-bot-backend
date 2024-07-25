@@ -278,16 +278,16 @@ const increaseStartCount = async (req, res, next) => {
 // FormFields Controller Methods
 const getAllFormFields = async (req, res, next) => {
   try {
-    const { formId, formFieldId } = req.params;
+    const { formId } = req.params;
 
-    if (!formId || !formFieldId) {
+    if (!formId) {
       return res.status(204).json({
         success: false,
-        message: "Form ID or form field ID is required.",
+        message: "Form ID is required.",
       });
     }
 
-    const formField = await FormField.findById({ _id: formFieldId });
+    const formField = await FormField.findById({ formId: formId });
 
     if (!formField) {
       return res.status(204).json({
