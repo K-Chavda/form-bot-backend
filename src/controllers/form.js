@@ -287,7 +287,7 @@ const getAllFormFields = async (req, res, next) => {
       });
     }
 
-    const formField = await FormField.findById({ formId: formId });
+    const formField = await FormField.findOne({ formId: formId });
 
     if (!formField) {
       return res.status(204).json({
