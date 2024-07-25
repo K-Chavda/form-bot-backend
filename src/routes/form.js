@@ -13,11 +13,7 @@ router.put("/:formId/view", verifyToken, formController.increaseFormView);
 router.put("/:formId/start", verifyToken, formController.increaseStartCount);
 
 // Form Fields
-router.get(
-  "/:formId/formfields/:formFieldId",
-  verifyToken,
-  formController.getAllFormFields
-);
+router.get("/:formId/formfields", verifyToken, formController.getAllFormFields);
 router.post(
   "/:formId/formfields",
   verifyToken,
