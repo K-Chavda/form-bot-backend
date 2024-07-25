@@ -453,9 +453,9 @@ const updateFormFields = async (req, res, next) => {
 
 const deleteFormField = async (req, res, next) => {
   try {
-    const { formId, formFieldId, fieldId } = req.params;
+    const { formId, fieldId } = req.params;
 
-    if (!formId || !formFieldId || !fieldId) {
+    if (!formId || !fieldId) {
       return res.status(204).json({
         success: false,
         message: "Form ID, form field ID and field ID are required.",
@@ -471,7 +471,7 @@ const deleteFormField = async (req, res, next) => {
       });
     }
 
-    const formField = await FormField.findById({ _id: formFieldId });
+    const formField = await FormField.findOne({ formId });
 
     if (!formField) {
       return res.status(204).json({
