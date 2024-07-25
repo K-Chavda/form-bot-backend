@@ -25,7 +25,7 @@ router.put(
   formController.updateFormFields
 );
 router.delete(
-  "/:formId/formfields/:formFieldId/field/:fieldId",
+  "/:formId/field/:fieldId",
   verifyToken,
   formController.deleteFormField
 );
