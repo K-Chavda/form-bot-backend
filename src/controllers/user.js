@@ -107,15 +107,18 @@ const updateUserDetails = async (req, res, next) => {
     const userDetails = await User.findById(userId);
 
     if (!userDetails) {
-      return res.status(204).json({
+      return res.status(404).json({
         success: false,
         message: "User not found.",
       });
     }
 
-    if (username) userDetails.name = name;
+    let updated = false;
 
-    let emailChanged = false;
+    if (username && username !== userDetails.username) {
+      userDetails.username = username;
+      updated = true;
+    }
 
     if (email && email !== userDetails.email) {
       const emailExists = await User.findOne({ email });
@@ -125,8 +128,8 @@ const updateUserDetails = async (req, res, next) => {
           message: "Email already in use.",
         });
       }
-      emailChanged = true;
       userDetails.email = email;
+      updated = true;
     }
 
     if (oldPassword && newPassword) {
@@ -149,6 +152,14 @@ const updateUserDetails = async (req, res, next) => {
         });
       }
       userDetails.password = await bcrypt.hash(newPassword, 8);
+      updated = true;
+    }
+
+    if (!updated) {
+      return res.status(400).json({
+        success: false,
+        message: "No changes detected to update.",
+      });
     }
 
     await userDetails.save();
@@ -167,8 +178,35 @@ const updateUserDetails = async (req, res, next) => {
   }
 };
 
+const getUserDetailsById = async (req, res, next) => {
+  const { userId } = req.body;
+  try {
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found.",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "User fetched successfully.",
+      data: user,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error.",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
   updateUserDetails,
+  getUserDetailsById,
 };

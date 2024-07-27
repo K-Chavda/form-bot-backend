@@ -9,32 +9,29 @@ router.get("/single/:formId", verifyToken, formController.getFormById);
 router.post("/:folderId?", verifyToken, formController.createForm);
 router.put("/:formId", verifyToken, formController.updateFormDetails);
 router.delete("/:formId", verifyToken, formController.deleteForm);
-router.put("/:formId/view", verifyToken, formController.increaseFormView);
-router.put("/:formId/start", verifyToken, formController.increaseStartCount);
+router.put("/:formId/view", formController.increaseFormView);
+router.put("/:formId/start", formController.increaseStartCount);
+router.put("/:formId/complete", formController.increaseCompletedCount);
 
 // Form Fields
 router.get("/:formId/formfields", verifyToken, formController.getAllFormFields);
+router.get(
+  "/:formId/field/:fieldSeq",
+  verifyToken,
+  formController.getFieldValue
+);
 router.post(
   "/:formId/formfields",
   verifyToken,
   formController.createFormFields
 );
-router.put(
-  "/:formId/formfields/:formFieldId",
-  verifyToken,
-  formController.updateFormFields
-);
-router.delete(
-  "/:formId/field/:fieldId",
-  verifyToken,
-  formController.deleteFormField
-);
 
 // User Responses
-router.post(
-  "/:formId/formfields/:formFieldId/userResponse",
+router.get(
+  "/:formId/user-responses",
   verifyToken,
-  formController.createUserResponse
+  formController.getAllUserResponses
 );
+router.post("/:formId/user-response", formController.createUserResponse);
 
 module.exports = router;

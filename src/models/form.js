@@ -24,6 +24,10 @@ const formSchema = new Schema(
       type: Number,
       default: 0,
     },
+    completed: {
+      type: Number,
+      default: 0,
+    },
     createdBy: {
       type: Schema.Types.ObjectId,
       ref: "User",
@@ -92,10 +96,8 @@ const userResponseSchema = new Schema(
       ref: "Form",
       required: true,
     },
-    formFieldId: {
-      type: Schema.Types.ObjectId,
-      ref: "FormField",
-      required: true,
+    uniqueKey: {
+      type: String,
     },
     formFieldsResponse: [
       {
@@ -109,15 +111,6 @@ const userResponseSchema = new Schema(
         },
       },
     ],
-    createdBy: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
-    updatedBy: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-    },
   },
   { timestamps: true }
 );
