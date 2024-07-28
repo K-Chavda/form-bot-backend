@@ -1,3 +1,7 @@
+# Project Title
+
+Form Bot
+
 ## Table of Contents
 
 - [Project Title](#project-title)
@@ -13,6 +17,10 @@
 - [API Documentation](#api-documentation)
   - [Register User](#api-register-user)
   - [Login User](#api-login-user)
+  - [Form APIs](#form-apis)
+  - [Form Field APIs](#form-field-apis)
+  - [User Response APIs](#user-response-apis)
+  - [Folder APIs](#folder-apis)
 
 ## Requirements Gathering
 
@@ -111,7 +119,7 @@ To get a local copy of this project up and running, follow these steps:
 
 ```
 {
-  "Content-Type": "application/json",
+  "Content-Type": "application/json"
 }
 ```
 
@@ -152,7 +160,7 @@ To get a local copy of this project up and running, follow these steps:
 
 ```
 {
-  "Content-Type": "application/json",
+  "Content-Type": "application/json"
 }
 ```
 
@@ -172,5 +180,445 @@ To get a local copy of this project up and running, follow these steps:
     "updatedAt": "[timestamp]",
     "__v": 0
   }
+}
+```
+
+### Form APIs
+
+#### Get All Forms
+
+`GET /api/v1/forms/all/:folderId?`
+
+##### Request Headers
+
+```
+{
+  "Content-Type": "application/json",
+  "Authorization": "[TOKEN]"
+}
+```
+
+##### Success Response
+
+```json
+{
+  "success": true,
+  "message": "Forms fetched successfully.",
+  "forms": [...]
+}
+```
+
+#### Get Form by ID
+
+`GET /api/v1/forms/single/:formId`
+
+##### Request Headers
+
+```
+{
+  "Content-Type": "application/json",
+  "Authorization": "[TOKEN]"
+}
+```
+
+##### Success Response
+
+```json
+{
+  "success": true,
+  "message": "Form fetched successfully.",
+  "form": { ... }
+}
+```
+
+#### Create Form
+
+`POST /api/v1/forms/:folderId?`
+
+##### Request Body
+
+```json
+{
+  "userId": "[userId]",
+  "name": "[formName]",
+  "theme": "[formTheme]"
+}
+```
+
+##### Request Headers
+
+```
+{
+  "Content-Type": "application/json",
+  "Authorization": "[TOKEN]"
+}
+```
+
+##### Success Response
+
+```json
+{
+  "success": true,
+  "message": "Form created successfully.",
+  "data": { ... }
+}
+```
+
+#### Update Form Details
+
+`PUT /api/v1/forms/:formId`
+
+##### Request Body
+
+```json
+{
+  "name": "[newFormName]",
+  "theme": "[newFormTheme]"
+}
+```
+
+##### Request Headers
+
+```
+{
+  "Content-Type": "application/json",
+  "Authorization": "[TOKEN]"
+}
+```
+
+##### Success Response
+
+```json
+{
+  "success": true,
+  "message": "Form name updated successfully.",
+  "form": { ... }
+}
+```
+
+#### Delete Form
+
+`DELETE /api/v1/forms/:formId`
+
+##### Request Headers
+
+```
+{
+  "Content-Type": "application/json",
+  "Authorization": "[TOKEN]"
+}
+```
+
+##### Success Response
+
+```json
+{
+  "success": true,
+  "message": "Form deleted successfully."
+}
+```
+
+#### Increase Form View
+
+`PUT /api/v1/forms/:formId/view`
+
+##### Request Headers
+
+```
+{
+  "Content-Type": "application/json"
+}
+```
+
+##### Success Response
+
+```json
+{
+  "success": true,
+  "message": "Form viewed count increased successfully.",
+  "form": { ... }
+}
+```
+
+#### Increase Start Count
+
+`PUT /api/v1/forms/:formId/start`
+
+##### Request Headers
+
+```
+{
+  "Content-Type": "application/json"
+}
+```
+
+##### Success Response
+
+```json
+{
+  "success": true,
+  "message": "Form started count increased successfully.",
+  "form": { ... }
+}
+```
+
+#### Increase Completed Count
+
+`PUT /api/v1/forms/:formId/complete`
+
+##### Request Headers
+
+```
+{
+  "Content-Type": "application/json"
+}
+```
+
+##### Success Response
+
+```json
+{
+  "success": true,
+  "message": "Form completed count increased successfully.",
+  "form": { ... }
+}
+```
+
+### Form Field APIs
+
+#### Get All Form Fields
+
+`GET /api/v1/forms/:formId/formfields`
+
+##### Request Headers
+
+```
+{
+  "Content-Type": "application/json",
+  "Authorization": "[TOKEN]"
+}
+```
+
+##### Success Response
+
+```json
+{
+  "success": true,
+  "message": "Form fields fetched successfully.",
+  "formFields": [...]
+}
+```
+
+#### Create Form Fields
+
+`POST /api/v1/forms/:formId/formfields`
+
+##### Request Body
+
+```json
+{
+  "userId": "[userId]",
+  "formFields": [...]
+}
+```
+
+##### Request Headers
+
+```
+{
+  "Content-Type": "application/json",
+  "Authorization": "[TOKEN]"
+}
+```
+
+##### Success Response
+
+```json
+{
+  "success": true,
+  "message": "Form field created/updated successfully.",
+  "data": { ... }
+}
+```
+
+### User Response APIs
+
+#### Create User Response
+
+`POST /api/v1/forms/:formId/user-response`
+
+##### Request Body
+
+```json
+{
+  "response": "[response]",
+  "seq": "[sequence]",
+  "uniqueKey": "[uniqueKey]"
+}
+```
+
+##### Request Headers
+
+```
+{
+  "Content-Type": "application/json"
+}
+```
+
+##### Success Response
+
+```json
+{
+  "success": true,
+  "message": "User response created successfully.",
+  "userResponse": { ... }
+}
+```
+
+#### Get All User Responses
+
+`GET /api/v1/forms/:formId/user-responses`
+
+##### Request Headers
+
+```
+{
+  "Content-Type": "application/json",
+  "Authorization": "[TOKEN]"
+}
+```
+
+##### Success Response
+
+```json
+
+
+{
+  "success": true,
+  "message": "User responses fetched successfully.",
+  "userResponses": [...]
+}
+```
+
+### Folder APIs
+
+#### Get All Folders
+
+`GET /api/v1/folders`
+
+##### Request Headers
+
+```
+{
+  "Content-Type": "application/json",
+  "Authorization": "[TOKEN]"
+}
+```
+
+##### Success Response
+
+```json
+{
+  "success": true,
+  "message": "Folders fetched successfully.",
+  "folders": [
+    {
+      "_id": "[folderId]",
+      "name": "[folderName]"
+    },
+    ...
+  ]
+}
+```
+
+#### Create Folder
+
+`POST /api/v1/folders`
+
+##### Request Body
+
+```json
+{
+  "userId": "[userId]",
+  "name": "[folderName]"
+}
+```
+
+##### Request Headers
+
+```
+{
+  "Content-Type": "application/json",
+  "Authorization": "[TOKEN]"
+}
+```
+
+##### Success Response
+
+```json
+{
+  "success": true,
+  "message": "Folder created successfully.",
+  "data": {
+    "_id": "[folderId]",
+    "createdBy": "[userId]",
+    "name": "[folderName]"
+  }
+}
+```
+
+#### Update Folder Name
+
+`PUT /api/v1/folders/:folderId`
+
+##### Request Body
+
+```json
+{
+  "name": "[newFolderName]"
+}
+```
+
+##### Request Headers
+
+```
+{
+  "Content-Type": "application/json",
+  "Authorization": "[TOKEN]"
+}
+```
+
+##### Success Response
+
+```json
+{
+  "success": true,
+  "message": "Folder name updated successfully.",
+  "folder": {
+    "_id": "[folderId]",
+    "name": "[newFolderName]"
+  }
+}
+```
+
+#### Delete Folder
+
+`DELETE /api/v1/folders/:folderId`
+
+##### Request Headers
+
+```
+{
+  "Content-Type": "application/json",
+  "Authorization": "[TOKEN]"
+}
+```
+
+##### Success Response
+
+```json
+{
+  "success": true,
+  "message": "Folder deleted successfully."
 }
 ```
