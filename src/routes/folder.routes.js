@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const folderController = require("../controllers/folder");
+const folderController = require("../controllers/folder.controller");
 const verifyToken = require("../middlewares/verifyToken");
 
 // Folder Routes

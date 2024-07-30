@@ -1,5 +1,5 @@
-const { Form, FormField, UserResponse } = require("../models/form");
-const { Folder } = require("../models/folder");
+const { Form, FormField, UserResponse } = require("../models/form.model");
+const { Folder } = require("../models/folder.model");
 const mongoose = require("mongoose");
 
 // Form Controller Methods

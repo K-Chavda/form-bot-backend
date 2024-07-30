@@ -27,15 +27,15 @@ app.get("/api/v1", (req, res) => {
 const endpointURL = "/api/v1";
 
 // User Router
-const userRouter = require("./routes/user");
+const userRouter = require("./routes/user.routes");
 app.use(`${endpointURL}/user`, userRouter);
 
 // Form Router
-const formRouter = require("./routes/form");
+const formRouter = require("./routes/form.routes");
 app.use(`${endpointURL}/form`, formRouter);
 
 // Folder Router
-const folderRouter = require("./routes/folder");
+const folderRouter = require("./routes/folder.routes");
 app.use(`${endpointURL}/folder`, folderRouter);
 
 module.exports = app;

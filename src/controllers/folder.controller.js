@@ -1,4 +1,4 @@
-const { Folder } = require("../models//folder");
+const { Folder } = require("../models/folder.model");
 
 // Folder Controller Methods
 const getFolders = async (req, res, next) => {
